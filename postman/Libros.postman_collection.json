@@ -1,0 +1,289 @@
+{
+  "info": {
+    "_postman_id": "f2f33b33-0d5b-4fc8-b0ba-4b4f706ec8a8",
+    "name": "Libros API",
+    "description": "Coleccion Postman para probar la API de libros.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear libro",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Clean Code\",\n  \"autor\": \"Robert C. Martin\",\n  \"precio\": 125000\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/libros",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "libros"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var data = pm.response.json();",
+              "if (data.id) {",
+              "    pm.collectionVariables.set('libroId', data.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar libros",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/libros",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "libros"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Respuesta es arreglo', function () {",
+              "    pm.expect(pm.response.json()).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Traer libro por ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/libros/{{libroId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "libros",
+            "{{libroId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Tiene id', function () {",
+              "    var body = pm.response.json();",
+              "    pm.expect(body).to.have.property('id');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actualizar libro parcialmente (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Titulo modificado\",\n  \"autor\": \"Autor modificado\",\n  \"precio\": 500.26\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/libros/{{libroId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "libros",
+            "{{libroId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Titulo actualizado', function () {",
+              "    var body = pm.response.json();",
+              "    pm.expect(body.titulo).to.eql('Titulo modificado');",
+              "});",
+              "pm.test('Precio actualizado', function () {",
+              "    var body = pm.response.json();",
+              "    pm.expect(body.precio).to.eql(500.26);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actualizar libro - solo titulo (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Solo titulo nuevo\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/libros/{{libroId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "libros",
+            "{{libroId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actualizar libro - patch vacio (debe dar 400)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/libros/{{libroId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "libros",
+            "{{libroId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test('Mensaje de validacion presente', function () {",
+              "    var body = pm.response.json();",
+              "    pm.expect(body.message).to.include('campo');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Traer libro por ID - no encontrado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/libros/999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "libros",
+            "999999"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "libroId",
+      "value": "1"
+    }
+  ]
+}
+
