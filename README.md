@@ -1,4 +1,4 @@
-# Libros API (Spring Boot 3 + Java 17)
+# Libros API
 
 API reactiva para gestion de libros con arquitectura por puertos y adaptadores.
 
@@ -30,22 +30,10 @@ API reactiva para gestion de libros con arquitectura por puertos y adaptadores.
 ./gradlew bootRun
 ```
 
-En Windows PowerShell:
-
-```powershell
-.\gradlew.bat bootRun
-```
-
 ## Pruebas
 
 ```bash
 ./gradlew test
-```
-
-En Windows PowerShell:
-
-```powershell
-.\gradlew.bat test
 ```
 
 ## Configuracion relevante
